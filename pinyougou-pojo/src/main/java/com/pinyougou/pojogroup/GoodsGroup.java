@@ -30,11 +30,10 @@ public class GoodsGroup implements Serializable{
      */
     private TbGoodsDesc goodsDesc;
 
-
     /**
      * sku 商品属性
      */
-    private List<TbItem> itemCatList;
+    private List<TbItem> items;
 
     public TbGoods getGoods() {
         return goods;
@@ -52,11 +51,11 @@ public class GoodsGroup implements Serializable{
         this.goodsDesc = goodsDesc;
     }
 
-    public List<TbItem> getItemCatList() {
-        return itemCatList;
+    public List<TbItem> getItems() {
+        return items;
     }
 
-    public void setItemCatList(List<TbItem> itemCatList) {
-        this.itemCatList = itemCatList;
+    public void setItems(List<TbItem> items) {
+        this.items = items;
     }
 }

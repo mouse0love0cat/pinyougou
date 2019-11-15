@@ -118,7 +118,6 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	//根据模板id查询规格列表，并添加规格参数到规格列表中
 	@Override
 	public List<Map> findSpecList(long id) {
-
 		//1 根据id得到模板对象
         TbTypeTemplate template = typeTemplateMapper.selectByPrimaryKey(id);
         //2 根据模板id对象查询规格列表

@@ -89,7 +89,6 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 
 	//根据parentid查询对象
 	$scope.findByParentId=function (parentId) {
-
 		// 记住父类的id  在save（）方法时调用
 		$scope.parentId = parentId;
 		//通过parentId查询分类列表
@@ -109,7 +108,6 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 
 		$scope.grade = value;
     }
-
     //读取列表
 	$scope.selectList=function (p_entity) {
 

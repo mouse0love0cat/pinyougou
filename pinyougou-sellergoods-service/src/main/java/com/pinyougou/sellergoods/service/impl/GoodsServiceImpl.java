@@ -1,17 +1,17 @@
 package com.pinyougou.sellergoods.service.impl;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.pinyougou.entity.PageResult;
-import com.pinyougou.mapper.TbGoodsDescMapper;
-import com.pinyougou.pojo.TbGoodsDesc;
+import com.pinyougou.mapper.*;
+import com.pinyougou.pojo.*;
 import com.pinyougou.pojogroup.GoodsGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.pinyougou.mapper.TbGoodsMapper;
-import com.pinyougou.pojo.TbGoods;
-import com.pinyougou.pojo.TbGoodsExample;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
 
@@ -30,6 +30,18 @@ public class GoodsServiceImpl implements GoodsService {
 	//商品扩展属性
 	@Autowired
 	private TbGoodsDescMapper goodsDescMapper;
+	//s商品的sku
+	@Autowired
+    private TbItemCatMapper itemCatMapper;
+	//商品的品牌
+	@Autowired
+    private TbBrandMapper brandMapper;
+	//商品所属商家
+    @Autowired
+    private TbSellerMapper sellerMapper;
+    @Autowired
+    private TbItemMapper itemMapper;
+
 	
 	/**
 	 * 查询全部
@@ -56,13 +68,48 @@ public class GoodsServiceImpl implements GoodsService {
 	public void add(GoodsGroup goods) {
 		//设置为未申请状态
 		goods.getGoods().setAuditStatus("0");
-		//添加商品
+		//1 添加商品
 		goodsMapper.insert(goods.getGoods());
 		//设置商品id
 		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
-		//插入商品扩展数据
+		// 2 插入商品扩展数据
 		goodsDescMapper.insert(goods.getGoodsDesc());
-	}
+		//3 添加items 得到item集合
+        List<TbItem> items = goods.getItems();
+        //3.1 遍历集合，设置相关属性
+        for (TbItem item : items) {
+            //3.2 设置商品名称
+            item.setTitle(goods.getGoods().getGoodsName());
+            //3.2 设置商品id
+            item.setGoodsId(goods.getGoodsDesc().getGoodsId());
+            //3.3 设置商品的分类id 为三级分类id
+            item.setCategoryid(goods.getGoods().getCategory3Id());
+            //3.4 设置分类名称
+            String name = itemCatMapper.selectByPrimaryKey(goods.getGoods().getCategory3Id()).getName();
+            item.setCategory(name);
+            //3.5 设置时间
+            item.setCreateTime(new Date());
+            item.setUpdateTime(new Date());
+            //3.6 设置品牌名称
+            String brandName = brandMapper.selectByPrimaryKey(goods.getGoods().getBrandId()).getName();
+            item.setBrand(brandName);
+            //3.7 设置商家id
+            String sellerName = sellerMapper.selectByPrimaryKey(goods.getGoods().getSellerId()).getName();
+            item.setSeller(sellerName);
+            //3.8 添加图片
+            //3.8.1 得到商品图片列表  字符串类型
+            String images = goods.getGoodsDesc().getItemImages();
+            //3.8.2 将其转换为map对象
+            List<Map> maps = JSON.parseArray(images, Map.class);
+            //3.8.3 遍历map集合  获取第一张图片的url
+            if (maps !=null && maps.size()>0){
+                String url = (String) maps.get(0).get("url");
+                item.setImage(url);
+            }
+            //执行添加操作
+            itemMapper.insert(item);
+        }
+    }
 
 	
 	/**

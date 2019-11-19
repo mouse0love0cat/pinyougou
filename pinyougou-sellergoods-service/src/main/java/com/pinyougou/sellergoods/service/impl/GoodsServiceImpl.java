@@ -77,6 +77,11 @@ public class GoodsServiceImpl implements GoodsService {
 		//3 添加items 得到item集合
         List<TbItem> items = goods.getItems();
         //3.1 遍历集合，设置相关属性
+        addItem(goods);
+    }
+
+    public void addItem(GoodsGroup goods) {
+        List<TbItem> items = goods.getItems();
         for (TbItem item : items) {
             //3.2 设置商品名称
             item.setTitle(goods.getGoods().getGoodsName());
@@ -111,14 +116,24 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
-	
-	/**
+
+    /**
 	 * 修改
 	 */
 	@Override
-	public void update(TbGoods goods){
-		goodsMapper.updateByPrimaryKey(goods);
-	}	
+	public void update(GoodsGroup goods){
+	    //先修改goods表
+		goodsMapper.updateByPrimaryKey(goods.getGoods());
+		//在修改商品描述表
+        goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());
+        //修改item表  先删除，再添加
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(goods.getGoods().getId());
+        itemMapper.deleteByExample(example);
+        //再添加item属性
+        addItem(goods);
+	}
 	
 	/**
 	 * 根据ID获取实体
@@ -126,8 +141,27 @@ public class GoodsServiceImpl implements GoodsService {
 	 * @return
 	 */
 	@Override
-	public TbGoods findOne(Long id){
-		return goodsMapper.selectByPrimaryKey(id);
+	public GoodsGroup findOne(Long id){
+        //1 创建实体类对象
+        GoodsGroup goods = new GoodsGroup();
+        // 2 根据id 获取实体
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+        //3 将tbgoods设置给goods
+        goods.setGoods(tbGoods);
+        //4 根据id查询商品描述对象
+        TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+        goods.setGoodsDesc(tbGoodsDesc);
+        //5 设置商品的item属性
+        //5.1 创建一个查询实例
+		TbItemExample example = new TbItemExample();
+		//5.2 创建查询条件
+        TbItemExample.Criteria criteria = example.createCriteria();
+        //5.3 添加查询条件
+        criteria.andGoodsIdEqualTo(id);
+        List<TbItem> tbItems = itemMapper.selectByExample(example);
+        goods.setItems(tbItems);
+        //5 返回实体类对象
+        return goods;
 	}
 
 	/**
@@ -139,18 +173,19 @@ public class GoodsServiceImpl implements GoodsService {
 			goodsMapper.deleteByPrimaryKey(id);
 		}		
 	}
-	
-	
+
 		@Override
-	public PageResult findPage(TbGoods goods, int pageNum, int pageSize) {
+	public PageResult findPageByKey(TbGoods goods, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
 		TbGoodsExample example=new TbGoodsExample();
 		Criteria criteria = example.createCriteria();
 		
 		if(goods!=null){			
-						if(goods.getSellerId()!=null && goods.getSellerId().length()>0){
-				criteria.andSellerIdLike("%"+goods.getSellerId()+"%");
+		    if(goods.getSellerId()!=null && goods.getSellerId().length()>0){
+				//criteria.andSellerIdLike("%"+goods.getSellerId()+"%");
+                //改为精确匹配
+                criteria.andSellerIdEqualTo(goods.getSellerId());
 			}
 			if(goods.getGoodsName()!=null && goods.getGoodsName().length()>0){
 				criteria.andGoodsNameLike("%"+goods.getGoodsName()+"%");
@@ -179,5 +214,5 @@ public class GoodsServiceImpl implements GoodsService {
 		Page<TbGoods> page= (Page<TbGoods>)goodsMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
 }

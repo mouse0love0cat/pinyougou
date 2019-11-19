@@ -33,7 +33,7 @@
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findByParentId(0)">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="findByParentId(0);findOne()">
 
 {{entity}}
             <!-- 正文区域 -->
@@ -74,7 +74,7 @@
 		                           	  	<table>
 		                           	  		<tr>
 		                           	  			<td>
-		                           	  				<select class="form-control"  ng-model="entity.goods.category1Id" ng-options=" item.id as item.name for item in itemCatList">
+		                           	  				<select class="form-control"  ng-model="entity.goods.category1Id" ng-options=" item.id as item.name for item in itemCat1List">
 		                           	  				</select>
 		                              			</td>
 												<td>
@@ -185,18 +185,18 @@
                             	<div class="row data-type">
 	                            	<div class="col-md-2 title">是否启用规格</div>
 			                        <div class="col-md-10 data">
-			                        	<input type="checkbox" >			                           
+			                        	<input type="checkbox" >
 			                        </div>
                             	</div>
                             	<p>
-                            	
-                            	<div>
+
+                            	<div >
 	                                <div class="row data-type">
 		                                <div ng-repeat="spec in specList">
 			                                <div class="col-md-2 title">{{spec.text}}</div>
 					                        <div class="col-md-10 data">
 					                            <span ng-repeat="option in spec.options">
-					                            	<input  type="checkbox" ng-click="updateSpecAttribute($event,spec.text,option.optionName)">{{option.optionName}}
+					                            	<input  type="checkbox" ng-checked="checkAttributeValue(spec.text,option.optionName)" ng-click="updateSpecAttribute($event,spec.text,option.optionName)">{{option.optionName}}
 					                            </span>
 											</div>
 					                     </div>

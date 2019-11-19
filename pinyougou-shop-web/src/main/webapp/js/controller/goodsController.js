@@ -1,14 +1,17 @@
  //控制层 
-app.controller('goodsController' ,function($scope  ,goodsService,uploadService,itemCatService,typeTemplateService){
+app.controller('goodsController' ,function($scope ,$controller,$location  ,goodsService,uploadService,itemCatService,typeTemplateService){
 
-
-
-
+	$controller('baseController',{$scope:$scope});//继承
 	//保存
 	$scope.save=function(){
         // 提取kindeditor编辑器的内容
         $scope.entity.goodsDesc.introduction = editor.html();
-		goodsService.add($scope.entity).success(
+        //定义默认的url
+        let url = "../goods/add.do";
+        if ($scope.entity.goods.id !=null){
+            url = "../goods/update.do";
+        }
+		goodsService.save(url,$scope.entity).success(
 			function(response){
 				if(response.success){
 					//重新查询 
@@ -23,6 +26,9 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
 			}		
 		);				
 	}
+
+
+	//定义图片实体类对象
 	$scope.imageEntity = {};
         //上传文件
 	$scope.uploadFile = function () {
@@ -36,8 +42,6 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
 			}
         )
     }
-
-
 
 	//保存图片
 	$scope.savePic=function () {
@@ -57,7 +61,7 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
     $scope.findByParentId = function (parentId) {
         itemCatService.findByParentId(parentId).success(
             (response)=>{
-                $scope.itemCatList = response;
+                $scope.itemCat1List = response;
             }
         )
     }
@@ -91,7 +95,6 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
 
 	/*根据模板id查询对应的品牌列表和 规参数列表*/
 	$scope.$watch("entity.goods.typeTemplateId",function (newValue,oldValue) {
-
 		typeTemplateService.findOne(newValue).success(
 			(response)=>{
 				//获取模板对象
@@ -99,7 +102,11 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
 				//获取模板对象中的 brandId 即品牌列表
 				$scope.brandList=JSON.parse(response.brandIds);
 				//获取扩展属性列表
-				$scope.entity.goodsDesc.customAttributeItems = JSON.parse(response.customAttributeItems);
+				//对其进行判断此时商品id为空，则添加，商品id不为空，则进行数据回显，进行修改操作
+				let id = $location.search()["goodsId"];
+				if (!id){
+                    $scope.entity.goodsDesc.customAttributeItems = JSON.parse(response.customAttributeItems);
+                }
 			}
 		)
 		$scope.findSpecList(newValue);
@@ -189,6 +196,102 @@ app.controller('goodsController' ,function($scope  ,goodsService,uploadService,i
 		}
 		//2 返回集合
 		return newList;
+    }
+
+
+    /*第二部分   商品管理*/
+
+    //分页
+    $scope.findPage=function(page,rows){
+        goodsService.findPage(page,rows).success(
+            function(response){
+                $scope.list=response.data;
+                $scope.paginationConf.totalItems=response.total;//更新总记录数
+            }
+        );
+    }
+
+    //跳转到商品修改页面并将id传递到页面中
+    $scope.skipToGoodsEdit = function(id){
+        location.href = 'goods_edit.html#?goodsId='+id;
+    }
+
+    //查询单个实体对象，进行修改数据的回显
+    $scope.findOne = function(){
+        //1 页面跳转并带参数
+        let goodsId = $location.search()["goodsId"];
+        //2 执行查询方法
+        goodsService.findOne(goodsId).success(
+            (response)=>{
+                //3 返回查询结果（不做处理仅显示部分数据  后面进行数据处理）
+                $scope.entity = response;
+                //3.1 富文本编辑器的处理
+                editor.html($scope.entity.goodsDesc.introduction);
+                //3. 2 图片处理
+                $scope.entity.goodsDesc.itemImages = JSON.parse($scope.entity.goodsDesc.itemImages);
+                //3.2 扩展属性处理  注意：此时需对添加操作时的扩展属性赋值操作进行判断，否则会出现值覆盖的现象
+                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.entity.goodsDesc.customAttributeItems)
+                //3.3 转换规格列表
+                $scope.entity.goodsDesc.specificationItems = JSON.parse($scope.entity.goodsDesc.specificationItems);
+                //3.4 转换sku商品列表
+                for (let j = 0;j<$scope.entity.items.length ; j++){
+                    //3.4.1 得到每一个item
+                    let item = $scope.entity.items[j];
+                    //3.4.2 将每一个item的spec转换成对象
+                    item.spec = JSON.parse(item.spec);
+                }
+            }
+        )
+    }
+
+    //根据当前item中的spec选项的值来确定是否选择某个规格选项
+    //思路：将当前查询的的spec中的值与goods列表中specificationItem中的值进行比较，若存在，则返回true，不存在返回false
+    $scope.checkAttributeValue = function(text,value){
+        //1 得到当前用户所选的所有规格的参数列表
+        let itemList = $scope.entity.goodsDesc.specificationItems;
+        //2 得到当前用户所选择的规格参数列表
+        let obj = searchObject(itemList,"attributeName",text);
+        //3 进行判断，若返回的列表为空，则置为false
+        if (!obj){
+            return false;
+        }else { //3.2 非空判断
+            //3.2.1 判断当前的集合中是否包含用户所选的规格参数
+            if (obj.attributeValue.indexOf(value)>=0){
+                return true;
+            }
+            return false;
+        }
+    };
+
+
+
+
+    //商品状态  通过数组的下标进行显示
+    $scope.status=['未审核','已审核','审核未通过','关闭'];
+
+    $scope.searchEntity={};//定义搜索对象
+    //搜索
+    $scope.search=function(page,rows){
+        goodsService.search(page,rows,$scope.searchEntity).success(
+            function(response){
+                $scope.list=response.data;
+                $scope.paginationConf.totalItems=response.total;//更新总记录数
+            }
+        );
+    };
+
+    //定义商品分类列表 用于显示商品分类
+    $scope.itemCatList = [];
+    //加载商品分类列表
+    $scope.findItemList = function(){
+        itemCatService.findAll().success(
+            (response)=>{
+                //遍历返回的response
+                for (let i=0,len = response.length;i<len;i++){
+                    $scope.itemCatList[response[i].id] = response[i].name;
+                }
+            }
+        );
     }
 
 

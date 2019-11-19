@@ -35,7 +35,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoods goods);
+	public void update(GoodsGroup goods);
 	
 
 	/**
@@ -43,7 +43,7 @@ public interface GoodsService {
 	 * @param id
 	 * @return
 	 */
-	public TbGoods findOne(Long id);
+	public GoodsGroup findOne(Long id);
 	
 	
 	/**
@@ -58,6 +58,8 @@ public interface GoodsService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
+	public PageResult findPageByKey(TbGoods goods, int pageNum, int pageSize);
+
+
 	
 }

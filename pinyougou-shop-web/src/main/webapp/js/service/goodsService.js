@@ -28,5 +28,9 @@ app.service('goodsService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+	//保存
+	this.save = function (url,entity) {
+		return $http.post(url,entity);
+    }
 });

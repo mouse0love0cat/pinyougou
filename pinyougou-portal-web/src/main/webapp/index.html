@@ -23,7 +23,7 @@
 
 	<!-- 头部栏位 -->
 	<!--页面顶部-->
-<div id="nav-bottom">
+<div id="nav-bottom" ng-app="pinyougou" ng-controller="contentController"  ng-init="findCategoryById(1)">
 	<!--顶部-->
 	<div class="nav-top">
 		<div class="top">
@@ -72,8 +72,8 @@
 							<form action="" class="sui-form form-inline">
 								<!--searchAutoComplete-->
 								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+									<input type="text" id="autocomplete" ng-model="keywords" type="text" class="input-error input-xxlarge" />
+									<button class="sui-btn btn-xlarge btn-danger" ng-click="search()" type="button">搜索</button>
 								</div>
 							</form>
 						</div>
@@ -532,7 +532,7 @@
 					  <div class="carousel-inner">
 					    <div class="{{$index==0?'active':''}} item" ng-repeat="item in categoryList[1]">
 					    <a href="{{item.url}}">
-					    	<img src="{{item.pic}}"  />
+					    	<img src="{{item.pic}}">
 					      </a>
 					    </div>
 					  </div><a href="#myCarousel" data-slide="prev" class="carousel-control left">‹</a><a href="#myCarousel" data-slide="next" class="carousel-control right">›</a>
@@ -1038,7 +1038,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="tab2" class="tab-pane">
+				<div id="tab-2" class="tab-pane">
 					<p>第二个</p>
 				</div>
 				<div id="tab9" class="tab-pane">

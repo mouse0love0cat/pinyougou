@@ -46,5 +46,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.2.6.RELEASE" level="project" />
+    <orderEntry type="module" module-name="pinyougou-search-interface" />
   </component>
 </module>

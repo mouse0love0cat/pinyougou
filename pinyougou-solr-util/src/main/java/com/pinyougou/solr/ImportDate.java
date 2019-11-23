@@ -9,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -54,6 +57,16 @@ public class ImportDate {
         solrTemplate.saveBeans(items);
         //4 提交
         solrTemplate.commit();
+    }
+    @Test
+    public void deleteFromIds(){
+
+        SimpleQuery query = new SimpleQuery("*:*");
+        Criteria criteria = new Criteria("item_goodsid").is("149187842867964");
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
+
     }
 
 }

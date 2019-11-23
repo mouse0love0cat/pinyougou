@@ -1,7 +1,10 @@
 package com.pinyougou.manager.controller;
+import java.util.Arrays;
 import java.util.List;
 
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.GoodsGroup;
+import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,8 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+	@Reference
+	private ItemSearchService    searchService;
 	
 	/**
 	 * 返回全部列表
@@ -93,7 +98,10 @@ public class GoodsController {
 	@RequestMapping("/delete")
 	public Result delete(Long [] ids){
 		try {
+			//1 从数据库中删除数据
 			goodsService.delete(ids);
+			//2 从索引库中删除数据
+			searchService.deleteFromIndex(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,5 +120,27 @@ public class GoodsController {
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
 		return goodsService.findPageByKey(goods, page, rows);
 	}
+
+	//同步更新索引库
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] goodsIds,String status){
+		try {
+			goodsService.updateStatus(goodsIds,status);
+			List<TbItem> itemList = goodsService.findItemByGoodIds(goodsIds,status);
+			if (itemList != null && itemList.size() > 0){
+				//更新索引库
+				searchService.importList(itemList);
+			}else {
+				System.out.println("无数据！");
+			}
+			return new Result(true,"商品审核成功!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"商品审核失败!");
+		}
+
+	}
+
+
 	
 }

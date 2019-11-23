@@ -9,10 +9,19 @@ app.controller('contentController',function ($scope,contentService) {
     $scope.findCategoryById=function (categoryId) {
         contentService.findByCategoryId(categoryId).success(
             function (response) {
-                $scope.categoryList[categoryId]=response;
+                for (let i = 0 ;i<response.length;i++) {
+                    $scope.categoryList[categoryId]=response;
+                }
             }
         )
     };
+
+    //搜索页面与首页进行对接
+    $scope.search = function () {
+        //带搜索关键字的跳转
+        location.href = "http://localhost:9104/search.html#?keywords="+$scope.keywords;
+    }
+
 
 
 });

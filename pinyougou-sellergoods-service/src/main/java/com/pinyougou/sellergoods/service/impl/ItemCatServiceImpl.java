@@ -12,6 +12,7 @@ import com.pinyougou.pojo.TbItemCat;
 import com.pinyougou.pojo.TbItemCatExample;
 import com.pinyougou.pojo.TbItemCatExample.Criteria;
 import com.pinyougou.sellergoods.service.ItemCatService;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 服务实现层
@@ -23,6 +24,8 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
+	@Autowired
+    private RedisTemplate redisTemplate;
 	
 	/**
 	 * 查询全部
@@ -109,7 +112,6 @@ public class ItemCatServiceImpl implements ItemCatService {
 	*/
 	@Override
 	public List<TbItemCat> findByParentId(Long parentId) {
-
 		//1 创建查询对象
 		TbItemCatExample example = new TbItemCatExample();
 		//2 创建查询条件
@@ -117,8 +119,14 @@ public class ItemCatServiceImpl implements ItemCatService {
         //3 设置查询条件
         criteria.andParentIdEqualTo(parentId);
         //4 执行查询
+        List<TbItemCat> itemCatList = itemCatMapper.selectByExample(example);
+        //5将商品分类列表加入redis
+        for (TbItemCat itemCat : itemCatList) {
+            //5.1 将分类放入缓存中，以分类名称为键，模板id为值
+            redisTemplate.boundHashOps("itemCat").put(itemCat.getName(),itemCat.getTypeId());
+        }
 
-		return  itemCatMapper.selectByExample(example);
+        return  itemCatList;
 	}
 
 }

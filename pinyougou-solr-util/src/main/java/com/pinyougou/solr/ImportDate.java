@@ -62,7 +62,7 @@ public class ImportDate {
     public void deleteFromIds(){
 
         SimpleQuery query = new SimpleQuery("*:*");
-        Criteria criteria = new Criteria("item_goodsid").is("149187842867964");
+        Criteria criteria = new Criteria("item_goodsid").is("149187842867960");
         query.addCriteria(criteria);
         solrTemplate.delete(query);
         solrTemplate.commit();

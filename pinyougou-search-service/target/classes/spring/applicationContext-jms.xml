@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--1 配置包扫描-->
+    <context:component-scan base-package="com.pinyougou.search.listenner"/>
+    <!--2 配置原始工厂-->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.25.129:61616"/>
+    </bean>
+    <!--3 spring包装原始工厂-->
+    <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+    <!--4 配置查询更新目标对象（点对点）-->
+    <bean id="goodsQueryQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg name="name" value="goods_quene_query"/>
+    </bean>
+    <!--5 配置删除的目标对象-->
+    <bean id="goodsDeleteQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg name="name" value="goods_queue_delete"></constructor-arg>
+    </bean>
+
+    <!--5 配置索引同步的消息监听容器-->
+    <bean  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <!--配置工厂-->
+        <property name="connectionFactory" ref="singleConnectionFactory"></property>
+        <!--配置目标对象-->
+        <property name="destination" ref="goodsQueryQueue"/>
+        <!--配置容器的监听-->
+        <property name="messageListener" ref="itemSearchListenner"/>
+    </bean>
+
+    <!--6 配置索引删除的消息监听容器-->
+    <bean  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <!--配置工厂-->
+        <property name="connectionFactory" ref="singleConnectionFactory"></property>
+        <!--配置目标对象-->
+        <property name="destination" ref="goodsDeleteQueue"/>
+        <!--配置容器的监听-->
+        <property name="messageListener" ref="itemDeleteListenner"/>
+    </bean>
+
+</beans>

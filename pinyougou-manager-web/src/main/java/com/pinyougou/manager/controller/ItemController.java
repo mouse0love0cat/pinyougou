@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class ItemController {
 
 	@Reference
 	private ItemService itemService;
+
 	
 	/**
 	 * 返回全部列表
@@ -101,7 +103,7 @@ public class ItemController {
 	
 		/**
 	 * 查询+分页
-	 * @param brand
+	 * @param item
 	 * @param page
 	 * @param rows
 	 * @return
@@ -110,5 +112,8 @@ public class ItemController {
 	public PageResult search(@RequestBody TbItem item, int page, int rows  ){
 		return itemService.findPage(item, page, rows);		
 	}
-	
+
+
+
+
 }

@@ -39,6 +39,7 @@ public class GoodsController {
 	 * 返回全部列表
 	 * @return
 	 */
+
 	@RequestMapping("/findPage")
 	public PageResult findPage(int page, int rows){
 		return goodsService.findPage(page, rows);

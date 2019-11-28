@@ -25,15 +25,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:4.2.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.28" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:dubbo:2.8.4" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.2.4.RELEASE" level="project" />
     <orderEntry type="module" module-name="pinyougou-sellergoods-interface" />
     <orderEntry type="module" module-name="pinyougou-pojo" />
-    <orderEntry type="library" name="Maven: org.springframework:security:spring-security-core:4.1.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:security:spring-security-web:4.1.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="pingyoug-content-interface" />
     <orderEntry type="module" module-name="pinyougou-common" />
     <orderEntry type="module-library">
@@ -46,6 +41,11 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.2.6.RELEASE" level="project" />
-    <orderEntry type="module" module-name="pinyougou-search-interface" />
+    <orderEntry type="module" module-name="pinyougou-page-interface" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jms:4.2.6.RELEASE" level="project" />
+    <orderEntry type="library" name="activemq-client-5.13.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.2.6.RELEASE" level="project" />
   </component>
 </module>

@@ -11,6 +11,7 @@
     </welcome-file-list>
 
     <!--添加spring-security文件-->
+    <!--扫描spring下的spring相关配置文件-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:spring/spring-*.xml</param-value>

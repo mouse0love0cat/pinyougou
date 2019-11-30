@@ -65,10 +65,8 @@ public class ItemPageServiceImpl implements ItemPageService {
             //按照状态降序排序  ，保证第一个为默认
             example.setOrderByClause("is_default desc");
             List<TbItem> items = itemMapper.selectByExample(example);
-            System.out.println(items);
             //将数据放入map集合中
             data.put("items",items);
-            System.out.println(items);
             //3,1 根据商品id查询商品表
             TbGoods tbGoods = goodsMapper.selectByPrimaryKey(goodsId);
             //3.2 根据商品id 查询商品描述信息

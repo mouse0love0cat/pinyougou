@@ -35,11 +35,8 @@ public class ItemSearchListenner implements MessageListener {
             //3 同步索引库
             searchService.importList(items);
             System.out.println("使用activemq同步索引库成功。。。。。。");
-
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 }

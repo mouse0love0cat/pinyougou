@@ -5,9 +5,14 @@ import com.pinyougou.entity.Result;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import com.pinyougou.utils.PhoneFormatCheckUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: wangyilong
@@ -32,7 +37,6 @@ public class UserController {
                 userService.getValidCode(phone);
                 //3 发送验证码
                 return new Result(true, "雅验证码发送成功!");
-
             }
             return new Result(false, "手机号不合法！");
         } catch (Exception e) {
@@ -40,7 +44,6 @@ public class UserController {
             return new Result(false, "验证码发送失败");
         }
     }
-
 
     //用户注册
     @RequestMapping("add")
@@ -58,6 +61,19 @@ public class UserController {
             e.printStackTrace();
             return new Result(false, "注册失败!");
         }
+    }
+
+    //3 获取登录输入的用户名
+    @RequestMapping("findName")
+    public Map findName(){
+        //1 获取输入的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        //2 创建一个map  用于存放用户名
+        Map map = new HashMap();
+        map.put("name",name);
+        System.out.println(name);
+        //3 返回map集合
+        return map;
     }
 
 }

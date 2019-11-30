@@ -28,6 +28,9 @@
         <module>pinyougou-user-interface</module>
         <module>pinyougou-user-service</module>
         <module>pinyougou-user-web</module>
+        <module>cas-demo01</module>
+        <module>cas-demo02</module>
+        <module>cas-demo03</module>
     </modules>
     <packaging>pom</packaging>
 

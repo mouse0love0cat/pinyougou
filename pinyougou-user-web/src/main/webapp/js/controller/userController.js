@@ -27,4 +27,13 @@ app.controller("userController",function ($scope,$controller,userService) {
             }
         })
     }
+
+    // 3 获取用户名
+    $scope.findName = function () {
+        userService.findName().success(response=>{
+            alert(response.name);
+            $scope.name = response.name;
+        });
+    }
+
 })

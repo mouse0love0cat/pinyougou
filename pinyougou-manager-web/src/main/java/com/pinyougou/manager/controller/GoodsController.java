@@ -215,7 +215,6 @@ public class GoodsController {
 	public void genItemHtml(Long goodsId){
 		itemPageService.genItemHtml(goodsId);
 	}
-
 	*/
 
 	

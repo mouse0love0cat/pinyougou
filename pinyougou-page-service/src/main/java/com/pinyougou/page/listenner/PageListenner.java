@@ -31,6 +31,5 @@ public class PageListenner implements MessageListener {
         } catch (JMSException e) {
             e.printStackTrace();
         }
-
     }
 }

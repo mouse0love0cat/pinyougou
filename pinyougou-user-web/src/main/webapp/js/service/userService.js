@@ -7,4 +7,8 @@ app.service("userService",function ($http) {
     this.add = (entity,validCode)=>{
         return $http.post("./user/add.do?validCode="+validCode,entity);
     }
+    //3 获取用户名
+    this.findName = ()=>{
+        return $http.get("./user/findName.do");
+    }
 })

@@ -27,7 +27,6 @@ public class QueueProducer {
         //发送消息
         jmsMessagingTemplate.convertAndSend("itcast",text);
     }
-
     //2 使用外置的服务进行服务
     @RequestMapping("sendMap")
     public void sendMap(){
@@ -37,9 +36,4 @@ public class QueueProducer {
         map.put("age","20");
         jmsMessagingTemplate.convertAndSend("itcast_map",map);
     }
-
-
-
-
-
 }

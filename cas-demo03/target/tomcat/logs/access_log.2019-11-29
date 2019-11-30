@@ -1,0 +1,7 @@
+0:0:0:0:0:0:0:1 - - [29/Nov/2019:12:25:57 +0800] "GET / HTTP/1.1" 302 - http-bio-9003-exec-1 57
+0:0:0:0:0:0:0:1 - - [29/Nov/2019:12:26:00 +0800] "GET /login/cas?ticket=ST-2-p3HW12w0eWDodYwTnMqv-cas01.example.org HTTP/1.1" 302 - http-bio-9003-exec-3 160
+0:0:0:0:0:0:0:1 - - [29/Nov/2019:12:26:01 +0800] "GET / HTTP/1.1" 200 99 http-bio-9003-exec-4 632
+0:0:0:0:0:0:0:1 - - [29/Nov/2019:12:26:02 +0800] "GET /logout/cas HTTP/1.1" 302 - http-bio-9003-exec-5 3
+0:0:0:0:0:0:0:1 - - [29/Nov/2019:12:26:03 +0800] "GET /logout.jsp HTTP/1.1" 200 118 http-bio-9003-exec-6 912
+127.0.0.1 - - [29/Nov/2019:12:26:03 +0800] "POST /login/cas HTTP/1.1" 200 - http-bio-9003-exec-9 10
+127.0.0.1 - - [29/Nov/2019:12:26:04 +0800] "POST /login/cas HTTP/1.1" 200 - http-bio-9003-exec-8 49

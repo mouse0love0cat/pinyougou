@@ -38,13 +38,11 @@ public class UserServiceImpl implements UserService {
     //1 生成随机六位验证码  并发送消息到队列
     @Override
     public void getValidCode(String phone) {
-
         //1 随机生成六位数的验证码
         String code = (long)((Math.random()) * 1000000) + "";
         System.out.printf("code:"+code);
         //2 将数据放入redis缓存中  用于用户登录时的验证码的比对
         redisTemplate.boundHashOps("smscode").put(phone,code);
-
         //3 使用消息队列发送消息
         jmsTemplate.send(userQueue, new MessageCreator() {
             @Override

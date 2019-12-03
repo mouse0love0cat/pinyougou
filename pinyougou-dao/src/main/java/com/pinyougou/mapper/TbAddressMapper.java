@@ -10,7 +10,7 @@ public interface TbAddressMapper {
 
     int deleteByExample(TbAddressExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(TbAddress record);
 

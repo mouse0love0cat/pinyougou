@@ -38,4 +38,52 @@ app.controller("cartController",function ($scope,$controller,cartService) {
             }
         }
     }
+    //4 根据用户名全部的地址列表
+    $scope.findAddressByName =()=>{
+        cartService.findAddressByName().success(response=>{
+            //1 获取地址列表
+            $scope.addressList=response;
+            //2 遍历地址列表 获取当前的地址
+            for (let i = 0,len =response.length;i<len ; i++){
+                if (response[i].isDefault=='1'){
+                    let addr = response[i];
+                    $scope.selectAddress(addr);
+                }
+            }
+        });
+    }
+
+    //5 点击选中地址(此处传入的为对象)
+    $scope.selectAddress = (addr)=>{
+        $scope.address = addr;
+    }
+    //6 判断是否选中(此处的address是一个属性  当前地址)
+    $scope.isSelected=(addr)=>{
+       return  $scope.address.address == addr;
+    }
+
+    //6 定义支付类型 默认为微信支付
+    $scope.order={paymentType:'1'};
+    $scope.selectPayType = (type)=>{
+        $scope.order.paymentType = type;
+    }
+
+    //7 保存订单
+    $scope.saveOrder = ()=>{
+        $scope.order.receiverAreaName=$scope.address.address;
+        $scope.order.receiverMobile=$scope.address.mobile;
+        $scope.order.receiver=$scope.address.contact;
+        cartService.saveOrder($scope.order).success(response=>{
+            if (response.success){
+                if ($scope.order.paymentType == '1'){
+                    location.href = "pay.html";
+                }else {
+                    location.href = "paysuccess.html";
+                }
+            }else {
+                alert(response.message);
+            }
+        });
+    }
+
 })

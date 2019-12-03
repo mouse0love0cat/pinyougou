@@ -7,4 +7,12 @@ app.service("cartService",function ($http) {
     this.addGoodsToCartList=(itemId,num)=>{
         return $http.get("./cart/addGoodsToCartList.do?itemId="+itemId+"&num="+num);
     }
+    //3 查询收货地址
+    this.findAddressByName=()=>{
+        return $http.get("./address/findAddressByName.do");
+    }
+    //4 添加订单到数据库
+    this.saveOrder = (order)=>{
+        return $http.post("./order/add.do",order);
+    }
 })

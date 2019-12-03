@@ -73,6 +73,9 @@ public class CartController {
     @RequestMapping("addGoodsToCartList")
     public Result addGoodsToCartList(long itemId,  int num){
         try {
+            //设置跨域请求的请求头（使用CORS解决跨域请求）
+            response.setHeader("Access-Control-Allow-Origin","http://localhost:9104");
+            response.setHeader("Access-Control-Allow-Credentials","true");
             //0 获取当前登录的用户名
             String userName = SecurityContextHolder.getContext().getAuthentication().getName();
             System.out.println(userName);

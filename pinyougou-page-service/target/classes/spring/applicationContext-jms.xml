@@ -8,7 +8,7 @@
     <context:component-scan base-package="com.pinyougou.page.listenner"/>
     <!--2 配置原始工厂-->
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://192.168.25.129:61616"/>
+        <property name="brokerURL" value="tcp://192.168.25.128:61616"/>
     </bean>
     <!--3 spring包装原始工厂-->
     <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">

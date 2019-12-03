@@ -6,7 +6,7 @@
 
     <!--1 配置原始工厂对象-->
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://192.168.25.129:61616"/>
+        <property name="brokerURL" value="tcp://192.168.25.128:61616"/>
      </bean>
     <!--2 使用spring包装原始工厂-->
     <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">

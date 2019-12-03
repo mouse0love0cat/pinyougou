@@ -201,7 +201,7 @@
 					<div class="sku-name">
 						<h4>{{sku.title}}</h4>
 					</div>
-					<div class="news"><span>推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</span></div>
+					<div class="news"><span>${goods.caption}</span></div>
 					<div class="summary">
 						<div class="summary-wrap">
 							<div class="fl title">

@@ -1,2 +1,3 @@
 com\pinyougou\utils\FastDFSClient.class
 com\pinyougou\utils\PhoneFormatCheckUtils.class
+com\pinyougou\utils\CookieUtil.class

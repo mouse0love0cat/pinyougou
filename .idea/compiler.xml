@@ -11,16 +11,16 @@
         <module name="pinyougou-cart-web" />
         <module name="pinyougou-user-web" />
         <module name="pinyougou-order-service" />
-        <module name="pinyougou-page-web" />
-        <module name="pinyougou-shop-web" />
+        <module name="pinyougou-common" />
         <module name="pinyougou-content-service" />
         <module name="pinyougou-sellergoods-interface" />
         <module name="pinyougou-solr-util" />
-        <module name="pinyougou-common" />
+        <module name="pinyougou-page-web" />
         <module name="springboot-sms" />
         <module name="pinyougou-manager-web" />
         <module name="pingyoug-content-interface" />
-        <module name="pinyougou-user-interface" />
+        <module name="cas-demo02" />
+        <module name="cas-demo03" />
         <module name="pinyougou-page-interface" />
         <module name="pinyougou-sellergoods-service" />
         <module name="pinyougou-order-interface" />
@@ -32,9 +32,9 @@
         <module name="pinyougou-cart-interface" />
         <module name="pinyougou-search-service" />
         <module name="pinyougou-search-interface" />
+        <module name="pinyougou-user-interface" />
+        <module name="pinyougou-shop-web" />
         <module name="pinyougou-pojo" />
-        <module name="cas-demo03" />
-        <module name="cas-demo02" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

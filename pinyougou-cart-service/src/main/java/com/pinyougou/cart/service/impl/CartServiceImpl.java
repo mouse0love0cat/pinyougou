@@ -30,7 +30,6 @@ public class CartServiceImpl  implements CartService {
     //1 添加商品到购物车
     @Override
     public List<Cart> addGoodsToCartList(List<Cart> cartList, long itemId, int num) {
-
         //1 根据itemId查询一个item对象
         TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
         //2 根据查询sellerId 当前购物车中是否包含此商品

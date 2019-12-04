@@ -72,5 +72,4 @@ app.controller('itemPageController',function($scope,$http){
 			}
 		})
 	}
-
 });

@@ -14,7 +14,7 @@
     <http pattern="/img/**" security="none"/>
     <http pattern="/plugins/**" security="none"/>
     <http pattern="/fonts/**" security="none"/>
-    <http pattern="/*.html" security="none"/>
+    <http pattern="/cart.html" security="none"/>
 <!--    <http pattern="/cart/addGoodsToCartList.do" security="none"/>
     <http pattern="/cart/findCartList.do" security="none"/>-->
     <!--2 定义cas与security的入口引用-->

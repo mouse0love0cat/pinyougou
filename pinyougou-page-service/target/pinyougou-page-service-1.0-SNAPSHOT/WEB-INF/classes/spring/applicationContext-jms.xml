@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--1 配置包扫描-->
+    <context:component-scan base-package="com.pinyougou.page.listenner"/>
+    <!--2 配置原始工厂-->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.25.128:61616"/>
+    </bean>
+    <!--3 spring包装原始工厂-->
+    <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+
+    <!--4 配置目标对象-->
+    <bean id="pageQueue" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg name="name" value="page_topic"/>
+    </bean>
+
+    <!--5 配置删除页面的目标对象-->
+    <bean id="pageDelete" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg name="name" value="page_topic_delete"/>
+    </bean>
+
+    <!--6  配置静态模板文件生成的监听容器-->
+    <bean  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+        <property name="destination" ref="pageQueue"/>
+        <property name="messageListener" ref="pageListenner"/>
+    </bean>
+
+    <!--7 配置静态模板文件删除的监听容器-->
+    <bean  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+        <property name="destination" ref="pageDelete"/>
+        <property name="messageListener" ref="pageDeleteListenner"/>
+    </bean>
+
+</beans>

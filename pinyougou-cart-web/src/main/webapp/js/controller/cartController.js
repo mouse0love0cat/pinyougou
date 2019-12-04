@@ -52,7 +52,6 @@ app.controller("cartController",function ($scope,$controller,cartService) {
             }
         });
     }
-
     //5 点击选中地址(此处传入的为对象)
     $scope.selectAddress = (addr)=>{
         $scope.address = addr;

@@ -14,7 +14,7 @@
   <artifactId>pinyougou-order-service</artifactId>
   <packaging>war</packaging>
 
-  <name>pinyougou-order-service Maven Webapp</name>
+  <name>pinyougou-order-service</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 

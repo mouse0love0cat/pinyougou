@@ -12,9 +12,11 @@
         <module name="pinyougou-page-interface" />
         <module name="pinyougou-solr-util" />
         <module name="pingyoug-content-interface" />
-        <module name="pinyougou-shop-web" />
+        <module name="pinyougou-seckill-interface" />
         <module name="pinyougou-page-service" />
         <module name="pinyougou-manager-web" />
+        <module name="pinyougou-shop-web" />
+        <module name="pinyougou-seckill-service" />
         <module name="pinyougou-cart-web" />
         <module name="pinyougou-search-web" />
         <module name="pinyougou-user-web" />
@@ -32,6 +34,7 @@
         <module name="pinyougou-search-service" />
         <module name="pinyougou-user-service" />
         <module name="pinyougou-pojo" />
+        <module name="pinyougou-seckill-web" />
         <module name="pinyougou-sellergoods-interface" />
         <module name="pinyougou-order-service" />
         <module name="pinyougou-content-service" />
@@ -41,6 +44,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="pinyougou-manager-web" target="1.8" />
+      <module name="pinyougou-seckill-web" target="1.8" />
       <module name="pinyougou-user-interface" target="1.8" />
       <module name="pinyougou-user-service" target="1.8" />
       <module name="pinyougou-user-web" target="1.8" />

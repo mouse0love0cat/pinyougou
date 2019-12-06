@@ -2,9 +2,12 @@ package com.pinyougou.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.entity.Result;
+import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pay.service.PayService;
+import com.pinyougou.pojo.TbPayLog;
 import com.pinyougou.utils.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,12 +26,15 @@ public class PayController {
     private PayService payService;
     @Autowired
     private IdWorker idWorker;
+    @Reference
+    private OrderService orderService;
 
     @RequestMapping("createNative")
     public Map createNative(){
-        long id = idWorker.nextId();
-        System.out.println(id);
-        return payService.createNative(id+"","1");
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        //从redis中获取订单id
+        TbPayLog payLog = orderService.findIdFromRedis(userId);
+        return payService.createNative(payLog.getOutTradeNo(),payLog.getTotalFee()+"");
     }
 
     //查询订单 根据订单号查询订单  判断是否支付，若已支付  跳转到支付成功页面  若未支付  定时刷新二维码 生成新的订单
@@ -43,6 +49,8 @@ public class PayController {
                 return  new Result(true,"支付出错!");
             }
             if (resultMap.get("trade_state").equals("SUCCESS")){
+                //修改订单的支付状态为已支付
+                orderService.updateOrderStatus(out_trade_no,resultMap.get("transaction_id")+"");
                 return new Result(true,"支付成功!");
             }
             try {

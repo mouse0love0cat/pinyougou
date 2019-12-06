@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <!--1.定义这个服务的名称-->
+    <dubbo:application name="pinyougou-seckill-service"/>
+    <!--2.指定用到的dubbo的协议-->
+    <dubbo:protocol name="dubbo" port="20889"/>
+    <!--3.指定注册中心的地址-->
+    <dubbo:registry address="zookeeper://192.168.25.129:2181"/>
+    <!--4.指定这个服务要注册到zookeeper上时在指定的包下扫描-->
+    <dubbo:annotation package="com.pinyougou.seckill.service"/>
+</beans>

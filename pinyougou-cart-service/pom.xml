@@ -12,7 +12,7 @@
     <artifactId>pinyougou-cart-service</artifactId>
     <packaging>war</packaging>
 
-    <name>pinyougou-cart-service Maven Webapp</name>
+    <name>pinyougou-cart-service</name>
 
 
     <properties>

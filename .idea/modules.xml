@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/pinyougou-manager-web/pinyougou-manager-web.iml" filepath="$PROJECT_DIR$/pinyougou-manager-web/pinyougou-manager-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pinyougou-seckill-web/pinyougou-seckill-web.iml" filepath="$PROJECT_DIR$/pinyougou-seckill-web/pinyougou-seckill-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/pinyougou-user-interface/pinyougou-user-interface.iml" filepath="$PROJECT_DIR$/pinyougou-user-interface/pinyougou-user-interface.iml" />
       <module fileurl="file://$PROJECT_DIR$/pinyougou-user-service/pinyougou-user-service.iml" filepath="$PROJECT_DIR$/pinyougou-user-service/pinyougou-user-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/pinyougou-user-web/pinyougou-user-web.iml" filepath="$PROJECT_DIR$/pinyougou-user-web/pinyougou-user-web.iml" />

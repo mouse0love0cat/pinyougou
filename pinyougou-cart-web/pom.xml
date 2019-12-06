@@ -12,7 +12,7 @@
   <artifactId>pinyougou-cart-web</artifactId>
   <packaging>war</packaging>
 
-  <name>pinyougou-cart-web Maven Webapp</name>
+  <name>pinyougou-cart-web</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

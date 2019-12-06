@@ -19,4 +19,6 @@ public interface PayService {
     public Map createNative(String out_trade_no, String total_fee);
     //查询订单状态
     public Map queryOrder(String out_trade_no);
+    //关闭订单
+    public Map closePay(Long out_trade_no);
 }

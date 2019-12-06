@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--0 定义包扫描-->
+    <context:component-scan base-package="com.pinyougou.service"/>
+    <!--1 配置logout.jsp放行-->
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/plugins/**" security="none"/>
+    <http pattern="/fonts/**" security="none"/>
+    <http pattern="/register.html" security="none"/>
+    <http pattern="/seckill-item.html" security="none"/>
+    <http pattern="/seckill-index.html" security="none"/>
+
+    <!--2 定义cas与security的入口引用-->
+    <http  use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">
+        <!--access="IS_AUTHENTICATED_ANONYMOUSLY" 用于设置资源可以在不登陆时可以访问。-->
+        <!--此配置与 security="none"的区别在于当用户未登陆时获取登陆人账号的值为anonymousUser  ，-->
+        <!--而security="none"的话，无论是否登陆都不能获取登录人账号的值。-->
+        <intercept-url pattern="/seckillOrder/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <!--2.1 配置角色-->
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+        <!--2.2 配置csrf网站攻击-->
+        <csrf disabled="true"/>
+        <!--2.3 定义一系列的过滤器-->
+        <!-- custom-filter为过滤器， position 表示将过滤器放在指定的位置上，
+        before表示放在指定位置之前  ，after表示放在指定的位置之后  -->
+        <!--cas过滤器-->
+        <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER"/>
+        <!--请求登出过滤器-->
+        <custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
+        <!--单点登出过滤器-->
+        <custom-filter ref="singleSignOutFilter" before="CAS_FILTER"/>
+    </http>
+
+    <!--3 定义入口点-->
+    <beans:bean id="casProcessingFilterEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+        <!--3.1 配置服务器的地址-->
+        <beans:property name="loginUrl" value="http://localhost:9000/cas/login"/>
+        <!--3.2 配置服务的属性-->
+        <beans:property name="serviceProperties" ref="serviceProperties"/>
+    </beans:bean>
+
+    <!--4 配置服务的属性对象-->
+    <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+        <!--4.1 配置本模块的地址 [模块地址+/login/cas]-->
+        <beans:property name="service" value="http://localhost:9109/login/cas"/>
+    </beans:bean>
+
+    <!--5  配置cas过滤器-->
+    <beans:bean id="casAuthenticationFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter">
+        <!--5.1 配置服务属性对象-->
+        <beans:property name="serviceProperties" ref="serviceProperties"/>
+        <!--5.2 配置认证管理器-->
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+    </beans:bean>
+
+    <!--5.3   配置认证管理器-->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="casAuthenticationProvider"/>
+    </authentication-manager>
+    <!--5.4  配置认证管理器-->
+    <beans:bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+        <!--配置用户认证的详情服务（用户自定义）-->
+        <beans:property name="authenticationUserDetailsService" >
+            <beans:bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+                <beans:constructor-arg ref="userDetailsService"/>
+            </beans:bean>
+        </beans:property>
+        <!--配置服务属性-->
+        <beans:property name="serviceProperties" ref="serviceProperties"/>
+        <!--引入票据校验器-->
+        <beans:property name="ticketValidator" >
+            <beans:bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator">
+                <!--cas服务器的地址-->
+                <beans:constructor-arg name="casServerUrlPrefix" value="http://localhost:9000/cas"/>
+            </beans:bean>
+        </beans:property>
+
+        <!--配置key-->
+        <beans:property name="key" value="an_id_for_this_auth_provider_only"/>
+    </beans:bean>
+
+    <!--6 配置单点登出过滤器-->
+    <beans:bean id="singleSignOutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"></beans:bean>
+
+    <!--7 配置请求登出过滤器-->
+    <beans:bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <!--7.1 配置登出跳转地址-->
+        <beans:constructor-arg value="http://localhost:9000/cas/logout?service=http://localhost:9103"/>
+        <!--7.2  配置单点登出过滤器的处理器-->
+        <beans:constructor-arg >
+            <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"></beans:bean>
+        </beans:constructor-arg>
+        <!-- 下面的配置代表在登出时使用/logout/cas，就可以跳转到http://localhost:9100/cas/logout?service=http://www.baidu.com这个地址上 -->
+        <beans:property name="filterProcessesUrl" value="/logout/cas"/>
+    </beans:bean>
+
+</beans:beans>

@@ -30,6 +30,8 @@ public class PayServiceImpl implements PayService {
     private String orderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     //设置查询订单的url
     private String orderQueryUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
+    //设置关闭订单的请求url地址
+    private String orderCloseUrl = "https://api.mch.weixin.qq.com/pay/closeorder";
 
     @Override
     public Map createNative(String out_trade_no, String total_fee) {
@@ -92,6 +94,33 @@ public class PayServiceImpl implements PayService {
             //3.2 得到的内容为xml格式 将其转换为map
             Map<String, String> resultMap = WXPayUtil.xmlToMap(content);
             return resultMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new HashMap();
+    }
+
+    //关闭订单
+    @Override
+    public Map closePay(Long out_trade_no) {
+        try {
+            //1 封装数据
+            Map paramMap = new HashMap();
+            paramMap.put("appid",appid);                                                //公众号id
+            paramMap.put("partner",partner);                                          //商户名
+            paramMap.put("out_trade_no",out_trade_no);                        //订单号
+            paramMap.put("nonce_str", WXPayUtil.generateNonceStr()); //随机字符串
+            //1.2 生成签名 格式为xml格式
+            String signedXml = WXPayUtil.generateSignedXml(paramMap, partnerkey);
+            //2 发送请求
+            HttpClient client = new HttpClient(orderQueryUrl);
+            client.setHttps(true);
+            client.setXmlParam(signedXml);
+            client.post();
+            //3 返回得到结果
+            String content = client.getContent();
+            Map<String, String> xmlMap = WXPayUtil.xmlToMap(content);
+            return xmlMap;
         } catch (Exception e) {
             e.printStackTrace();
         }

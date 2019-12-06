@@ -34,5 +34,11 @@
     <orderEntry type="module" module-name="pinyougou-pojo" />
     <orderEntry type="module" module-name="pinyougou-seckill-interface" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.2.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:4.1.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-cas:4.2.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.jasig.cas.client:cas-client-core:3.3.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:4.2.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.1.0.RELEASE" level="project" />
+    <orderEntry type="module" module-name="pinyougou-pay-interface" />
   </component>
 </module>

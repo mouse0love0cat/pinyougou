@@ -5,6 +5,7 @@ import java.util.List;
 import com.pinyougou.entity.PageResult;
 import com.pinyougou.entity.Result;
 import com.pinyougou.seckill.service.SeckillOrderService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -111,6 +112,24 @@ public class SeckillOrderController {
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbSeckillOrder seckillOrder, int page, int rows  ){
 		return seckillOrderService.findPage(seckillOrder, page, rows);		
+	}
+
+	//根据秒杀商品id进行下单请求
+	@RequestMapping("submitOrder")
+	public Result submitOrder(Long id){
+		//1 对用户登录做判断
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		if ("anonymousUser".equals(userId)){          //表明是用户未登录 是匿名用户
+			return new Result(false,"用户未登录");
+		}
+		try {
+			//2 进行下单操作
+			seckillOrderService.submitOrder(id,userId);
+			return new Result(true,"下单成功!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"下单失败");
+		}
 	}
 	
 }

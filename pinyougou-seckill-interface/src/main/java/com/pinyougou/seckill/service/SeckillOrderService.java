@@ -57,5 +57,16 @@ public interface SeckillOrderService {
 	 * @return
 	 */
 	public PageResult findPage(TbSeckillOrder seckillOrder, int pageNum, int pageSize);
-	
+
+	//用户下单请求
+    public void submitOrder(Long id, String userId);
+
+    //生成支付二维码
+	public TbSeckillOrder findOrderFromRedisById(String userId);
+
+	//将订单信息保存到数据库中
+	public void saveOrderFromRedisToDb(String userId, Long out_trade_no,String transactionId);
+
+	//将订单信息从缓存库中删除
+	public void deleteFromRedis(String userId, Long out_trade_no);
 }

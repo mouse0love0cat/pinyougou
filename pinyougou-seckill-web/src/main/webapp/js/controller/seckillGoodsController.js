@@ -63,4 +63,19 @@ app.controller("seckillGoodsController", function ($scope, $controller, $locatio
             }
         },1000);
     }
+
+    //6 提交订单 传入秒杀商品id
+    $scope.submitOrder = ()=>{
+        seckillGoodsService.submitOrder($scope.secKillGoods.id).success(response=>{
+            if (response.success){
+                alert("亲，请在一分钟内完成支付操作!");
+                location.href = "pay.html";
+            }else {
+                alert(response.message);
+            }
+        });
+    }
+
+
+
 })
